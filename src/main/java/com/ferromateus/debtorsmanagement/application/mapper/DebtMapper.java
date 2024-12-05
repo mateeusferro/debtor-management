@@ -5,6 +5,7 @@ import com.ferromateus.debtorsmanagement.infrastructure.persistence.entity.DebtE
 
 public class DebtMapper {
     public static Debt toDomain(DebtEntity debt) {
+        if (debt == null) throw new IllegalArgumentException("Debt cannot be null");
         return new Debt(
                 debt.getId(),
                 debt.getAmount(),
@@ -17,6 +18,7 @@ public class DebtMapper {
     }
 
     public static DebtEntity toEntity(Debt debt) {
+        if (debt == null) throw new IllegalArgumentException("Debt cannot be null");
         return new DebtEntity(
                 debt.getId(),
                 DebtorMapper.toEntity(debt.getDebtor()),
