@@ -1,5 +1,6 @@
 package com.ferromateus.debtorsmanagement.domain.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Debtor {
@@ -77,5 +78,23 @@ public class Debtor {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Debtor debtor = (Debtor) o;
+        return Objects.equals(id, debtor.id)
+                && Objects.equals(address, debtor.address)
+                && Objects.equals(cpf, debtor.cpf)
+                && Objects.equals(email, debtor.email)
+                && Objects.equals(name, debtor.name)
+                && Objects.equals(phoneNumber, debtor.phoneNumber)
+                && Objects.equals(status, debtor.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, address, cpf, email, name, phoneNumber, status);
     }
 }

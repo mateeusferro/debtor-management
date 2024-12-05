@@ -3,6 +3,7 @@ package com.ferromateus.debtorsmanagement.domain.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Debt {
@@ -81,5 +82,23 @@ public class Debt {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Debt debt = (Debt) o;
+        return Objects.equals(id, debt.id)
+                && Objects.equals(amount, debt.amount)
+                && Objects.equals(createdDate, debt.createdDate)
+                && Objects.equals(debtor, debt.debtor)
+                && Objects.equals(description, debt.description)
+                && Objects.equals(dueDate, debt.dueDate)
+                && Objects.equals(status, debt.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, createdDate, debtor, description, dueDate, status);
     }
 }

@@ -2,6 +2,7 @@ package com.ferromateus.debtorsmanagement.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Payment {
@@ -59,5 +60,21 @@ public class Payment {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return Objects.equals(id, payment.id)
+                && Objects.equals(amount, payment.amount)
+                && Objects.equals(debt, payment.debt)
+                && Objects.equals(paymentDate, payment.paymentDate)
+                && Objects.equals(method, payment.method);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, debt, paymentDate, method);
     }
 }
