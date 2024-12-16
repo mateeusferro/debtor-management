@@ -1,5 +1,11 @@
 package com.ferromateus.debtorsmanagement.configuration;
 
+import com.ferromateus.debtorsmanagement.application.usecase.debt.impl.CreateDebtUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.debt.interfaces.CreateDebtUseCase;
+import com.ferromateus.debtorsmanagement.application.usecase.debtor.impl.CreateDebtorUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.debtor.interfaces.CreateDebtorUseCase;
+import com.ferromateus.debtorsmanagement.application.usecase.payment.impl.CreatePaymentUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.payment.interfaces.CreatePaymentUseCase;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtGateway;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtorGateway;
 import com.ferromateus.debtorsmanagement.domain.gateway.PaymentGateway;
@@ -29,4 +35,20 @@ public class AppConfig {
     PaymentGateway paymentGateway(PaymentRepository paymentRepository) {
         return new PaymentRepositoryGateway(paymentRepository);
     }
+
+    @Bean
+    CreateDebtorUseCase createDebtorUseCase(DebtorGateway debtorGateway) {
+        return new CreateDebtorUseCaseImpl(debtorGateway);
+    }
+
+    @Bean
+    CreateDebtUseCase createDebtUseCase(DebtGateway debtGateway) {
+        return new CreateDebtUseCaseImpl(debtGateway);
+    }
+
+    @Bean
+    CreatePaymentUseCase createPaymentUseCase(PaymentGateway paymentGateway) {
+        return new CreatePaymentUseCaseImpl(paymentGateway);
+    }
+
 }
