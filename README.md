@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is developed using Spring Boot and focuses on managing debtor information. The main goal of the project is to enhance my skills in unit testing with Java, while also integrating several modern DevOps tools, including GitHub Actions, Dependabot, SonarQube, and Prometheus for continuous integration, dependency management, code quality, and monitoring.
+This project is developed using Spring Boot and Clean Architecture, focuses on managing debtor information. The main goal of the project is to enhance my skills in unit testing with Java, while also integrating several modern DevOps tools, including GitHub Actions, Dependabot, SonarQube, and Prometheus for continuous integration, dependency management, code quality, and monitoring.
 
 ## Objectives
 
@@ -24,7 +24,7 @@ This project is developed using Spring Boot and focuses on managing debtor infor
 ## Setup
 
 1. Clone the repository:  
-   `git clone <repository-url>`
+   `git clone git@github.com:mateeusferro/debtor-management.git`
 
 2. Install dependencies:  
    `./mvnw install` (for Maven users)
