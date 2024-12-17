@@ -1,4 +1,4 @@
-package com.ferromateus.debtorsmanagement.configuration;
+package com.ferromateus.debtorsmanagement.infrastructure.configuration;
 
 import com.ferromateus.debtorsmanagement.application.usecase.debt.impl.CreateDebtUseCaseImpl;
 import com.ferromateus.debtorsmanagement.application.usecase.debt.interfaces.CreateDebtUseCase;
