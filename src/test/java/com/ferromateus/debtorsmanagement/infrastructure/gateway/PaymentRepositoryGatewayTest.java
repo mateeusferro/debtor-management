@@ -1,5 +1,6 @@
 package com.ferromateus.debtorsmanagement.infrastructure.gateway;
 
+import com.ferromateus.debtorsmanagement.domain.exception.ItemNotFoundException;
 import com.ferromateus.debtorsmanagement.domain.model.Debt;
 import com.ferromateus.debtorsmanagement.domain.model.Debtor;
 import com.ferromateus.debtorsmanagement.domain.model.Payment;
@@ -78,10 +79,6 @@ class PaymentRepositoryGatewayTest {
     }
 
     @Test
-    void getPaymentsByDebt() {
-    }
-
-    @Test
     void getPayment() {
         Payment payment = paymentRepositoryGateway.getPayment(paymentId);
         assertNotNull(payment);
@@ -103,7 +100,7 @@ class PaymentRepositoryGatewayTest {
     @Test
     void deletePayment() {
         paymentRepositoryGateway.deletePayment(paymentId);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(ItemNotFoundException.class, () -> {
             paymentRepositoryGateway.getPayment(paymentId);
         });
     }
