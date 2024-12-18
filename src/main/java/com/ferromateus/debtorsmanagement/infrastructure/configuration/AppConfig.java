@@ -42,13 +42,13 @@ public class AppConfig {
     }
 
     @Bean
-    CreateDebtUseCase createDebtUseCase(DebtGateway debtGateway) {
-        return new CreateDebtUseCaseImpl(debtGateway);
+    CreateDebtUseCase createDebtUseCase(DebtGateway debtGateway, DebtorGateway debtorGateway) {
+        return new CreateDebtUseCaseImpl(debtGateway, debtorGateway);
     }
 
     @Bean
-    CreatePaymentUseCase createPaymentUseCase(PaymentGateway paymentGateway) {
-        return new CreatePaymentUseCaseImpl(paymentGateway);
+    CreatePaymentUseCase createPaymentUseCase(PaymentGateway paymentGateway, DebtGateway debtGateway) {
+        return new CreatePaymentUseCaseImpl(paymentGateway, debtGateway);
     }
 
 }
