@@ -1,6 +1,7 @@
 package com.ferromateus.debtorsmanagement.infrastructure.gateway;
 
 import com.ferromateus.debtorsmanagement.application.mapper.DebtorMapper;
+import com.ferromateus.debtorsmanagement.domain.exception.ItemNotFoundException;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtorGateway;
 import com.ferromateus.debtorsmanagement.domain.model.Debtor;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.entity.DebtorEntity;
@@ -8,7 +9,6 @@ import com.ferromateus.debtorsmanagement.infrastructure.persistence.repository.D
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class DebtorRepositoryGateway implements DebtorGateway {
     private final DebtorRepository debtorRepository;
@@ -27,19 +27,18 @@ public class DebtorRepositoryGateway implements DebtorGateway {
     @Override
     public List<Debtor> getDebtors() {
         List<DebtorEntity> debtors = (List<DebtorEntity>) debtorRepository.findAll();
-        return debtors.stream().map(DebtorMapper::toDomain).collect(Collectors.toList());
+        return debtors.stream().map(DebtorMapper::toDomain).toList();
     }
 
     @Override
     public Debtor getDebtor(UUID id) {
-        DebtorEntity debtorEntity = debtorRepository.findById(id).orElse(null);
+        DebtorEntity debtorEntity = debtorRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Debtor not found"));
         return DebtorMapper.toDomain(debtorEntity);
     }
 
     @Override
     public Debtor updateDebtor(UUID id, Debtor debtor) {
-        DebtorEntity debtorEntity = debtorRepository.findById(id).orElse(null);
-        if (debtorEntity == null) throw new IllegalArgumentException("Debtor not found");
+        DebtorEntity debtorEntity = debtorRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Debtor not found"));
 
         debtorEntity.setId(debtor.getId());
         DebtorEntity debtorToUpdate = DebtorMapper.toEntity(debtor);

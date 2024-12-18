@@ -1,5 +1,6 @@
 package com.ferromateus.debtorsmanagement.infrastructure.gateway;
 
+import com.ferromateus.debtorsmanagement.domain.exception.ItemNotFoundException;
 import com.ferromateus.debtorsmanagement.domain.model.Debtor;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.repository.DebtorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +77,7 @@ class DebtorRepositoryGatewayTest {
     @Test
     void deleteDebtor() {
         debtorRepositoryGateway.deleteDebtor(debtorId);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(ItemNotFoundException.class, () -> {
             debtorRepositoryGateway.getDebtor(debtorId);
         });
     }

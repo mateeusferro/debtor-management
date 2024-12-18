@@ -1,6 +1,7 @@
 package com.ferromateus.debtorsmanagement.infrastructure.gateway;
 
 import com.ferromateus.debtorsmanagement.application.mapper.DebtMapper;
+import com.ferromateus.debtorsmanagement.domain.exception.ItemNotFoundException;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtGateway;
 import com.ferromateus.debtorsmanagement.domain.model.Debt;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.entity.DebtEntity;
@@ -27,7 +28,7 @@ public class DebtRepositoryGateway implements DebtGateway {
     @Override
     public List<Debt> getDebts() {
         List<DebtEntity> debts = (List<DebtEntity>) debtRepository.findAll();
-        return debts.stream().map(DebtMapper::toDomain).collect(Collectors.toList());
+        return debts.stream().map(DebtMapper::toDomain).toList();
     }
 
     @Override
@@ -37,14 +38,13 @@ public class DebtRepositoryGateway implements DebtGateway {
 
     @Override
     public Debt getDebt(UUID id) {
-        DebtEntity debtEntity = debtRepository.findById(id).orElse(null);
+        DebtEntity debtEntity = debtRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Debt not found"));
         return DebtMapper.toDomain(debtEntity);
     }
 
     @Override
     public Debt updateDebt(UUID id, Debt debt) {
-        DebtEntity debtEntity = debtRepository.findById(id).orElse(null);
-        if (debtEntity == null) throw new IllegalArgumentException("Debt not found");
+        DebtEntity debtEntity = debtRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Debt not found"));
 
         debtEntity.setId(debt.getId());
         DebtEntity debtToUpdate = DebtMapper.toEntity(debt);
