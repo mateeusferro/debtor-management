@@ -75,10 +75,16 @@ class DebtRepositoryGatewayTest {
     }
 
     @Test
+    void getDebtsByDebtor() {
+        List<Debt> debts = debtRepositoryGateway.getDebtsByDebtor(debtor.getId());
+        assertTrue(debts.isEmpty());
+    }
+
+    @Test
     void updateDebt() {
         Debt debtToUpdate = new Debt(null, BigDecimal.valueOf(1000), LocalDateTime.of(2024, 10, 30, 12, 50, 55),
                 "Test Debt", debtor, LocalDate.of(2025, 1, 30), "Open");
-        Debt updatedDebt = debtRepositoryGateway.createDebt(debtToUpdate);
+        Debt updatedDebt = debtRepositoryGateway.updateDebt(debtId, debtToUpdate);
 
         assertNotNull(updatedDebt.getId());
         assertEquals(updatedDebt.getStatus(), debt.getStatus());

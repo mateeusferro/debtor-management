@@ -5,10 +5,10 @@ import com.ferromateus.debtorsmanagement.presentation.dto.DebtDTO;
 
 public class DebtDTOMapper {
 
-    // Will we need?
-//    public static DebtDTO toDTO(Debt debt) {}
+    private DebtDTOMapper() {}
 
     public static Debt toDomain(DebtDTO debtDTO) {
+        if (debtDTO == null) throw new IllegalArgumentException("DebtDTO cannot be null");
         return new Debt(
                 null,
                 debtDTO.amount(),
@@ -17,6 +17,6 @@ public class DebtDTOMapper {
                 null,
                 debtDTO.dueDate(),
                 debtDTO.status()
-                );
+        );
     }
 }
