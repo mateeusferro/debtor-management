@@ -1,11 +1,17 @@
 package com.ferromateus.debtorsmanagement.infrastructure.configuration;
 
 import com.ferromateus.debtorsmanagement.application.usecase.debt.impl.CreateDebtUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.debt.impl.GetDebtByIdUseCaseImpl;
 import com.ferromateus.debtorsmanagement.application.usecase.debt.interfaces.CreateDebtUseCase;
+import com.ferromateus.debtorsmanagement.application.usecase.debt.interfaces.GetDebtByIdUseCase;
 import com.ferromateus.debtorsmanagement.application.usecase.debtor.impl.CreateDebtorUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.debtor.impl.GetDebtorByIdUseCaseImpl;
 import com.ferromateus.debtorsmanagement.application.usecase.debtor.interfaces.CreateDebtorUseCase;
+import com.ferromateus.debtorsmanagement.application.usecase.debtor.interfaces.GetDebtorByIdUseCase;
 import com.ferromateus.debtorsmanagement.application.usecase.payment.impl.CreatePaymentUseCaseImpl;
+import com.ferromateus.debtorsmanagement.application.usecase.payment.impl.GetPaymentByIdUseCaseImpl;
 import com.ferromateus.debtorsmanagement.application.usecase.payment.interfaces.CreatePaymentUseCase;
+import com.ferromateus.debtorsmanagement.application.usecase.payment.interfaces.GetPaymentByIdUseCase;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtGateway;
 import com.ferromateus.debtorsmanagement.domain.gateway.DebtorGateway;
 import com.ferromateus.debtorsmanagement.domain.gateway.PaymentGateway;
@@ -42,13 +48,28 @@ public class AppConfig {
     }
 
     @Bean
+    GetDebtorByIdUseCase getDebtorByIdUseCase(DebtorGateway debtorGateway) {
+        return new GetDebtorByIdUseCaseImpl(debtorGateway);
+    }
+
+    @Bean
     CreateDebtUseCase createDebtUseCase(DebtGateway debtGateway, DebtorGateway debtorGateway) {
         return new CreateDebtUseCaseImpl(debtGateway, debtorGateway);
     }
 
     @Bean
+    GetDebtByIdUseCase getDebtByIdUseCase(DebtGateway debtGateway) {
+        return new GetDebtByIdUseCaseImpl(debtGateway);
+    }
+
+    @Bean
     CreatePaymentUseCase createPaymentUseCase(PaymentGateway paymentGateway, DebtGateway debtGateway) {
         return new CreatePaymentUseCaseImpl(paymentGateway, debtGateway);
+    }
+
+    @Bean
+    GetPaymentByIdUseCase getPaymentByIdUseCase(PaymentGateway paymentGateway) {
+        return new GetPaymentByIdUseCaseImpl(paymentGateway);
     }
 
 }
