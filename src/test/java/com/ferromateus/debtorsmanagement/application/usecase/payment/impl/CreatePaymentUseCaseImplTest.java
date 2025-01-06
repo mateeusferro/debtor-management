@@ -1,9 +1,12 @@
-package com.ferromateus.debtorsmanagement.infrastructure.gateway;
+package com.ferromateus.debtorsmanagement.application.usecase.payment.impl;
 
-import com.ferromateus.debtorsmanagement.domain.exception.ItemNotFoundException;
+import com.ferromateus.debtorsmanagement.application.usecase.payment.interfaces.CreatePaymentUseCase;
 import com.ferromateus.debtorsmanagement.domain.model.Debt;
 import com.ferromateus.debtorsmanagement.domain.model.Debtor;
 import com.ferromateus.debtorsmanagement.domain.model.Payment;
+import com.ferromateus.debtorsmanagement.infrastructure.gateway.DebtRepositoryGateway;
+import com.ferromateus.debtorsmanagement.infrastructure.gateway.DebtorRepositoryGateway;
+import com.ferromateus.debtorsmanagement.infrastructure.gateway.PaymentRepositoryGateway;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.repository.DebtRepository;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.repository.DebtorRepository;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.repository.PaymentRepository;
@@ -16,15 +19,12 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class PaymentRepositoryGatewayTest {
+class CreatePaymentUseCaseImplTest {
 
     @Autowired
     private DebtRepository debtRepository;
@@ -32,17 +32,18 @@ class PaymentRepositoryGatewayTest {
     private DebtorRepository debtorRepository;
     @Autowired
     private PaymentRepository paymentRepository;
-    private PaymentRepositoryGateway paymentRepositoryGateway;
+    private CreatePaymentUseCase createPaymentUseCase;
     private Payment payment;
-    private UUID paymentId;
-    private Debtor debtor;
     private Debt debt;
 
     @BeforeEach
     void setUp() {
         DebtorRepositoryGateway debtorRepositoryGateway = new DebtorRepositoryGateway(debtorRepository);
         DebtRepositoryGateway debtRepositoryGateway = new DebtRepositoryGateway(debtRepository);
-        debtor = new Debtor(null, "Address Test", "123.456.789-10", "test@test.com",
+        PaymentRepositoryGateway paymentRepositoryGateway = new PaymentRepositoryGateway(paymentRepository);
+        createPaymentUseCase = new CreatePaymentUseCaseImpl(paymentRepositoryGateway, debtRepositoryGateway);
+
+        Debtor debtor = new Debtor(null, "Address Test", "123.456.789-10", "test@test.com",
                 "Test", "12345-7891", true);
         Debtor savedDebtor = debtorRepositoryGateway.createDebtor(debtor);
         debtor.setId(savedDebtor.getId());
@@ -52,62 +53,18 @@ class PaymentRepositoryGatewayTest {
         Debt savedDebt = debtRepositoryGateway.createDebt(debt);
         debt.setId(savedDebt.getId());
 
-        paymentRepositoryGateway = new PaymentRepositoryGateway(paymentRepository);
         payment = new Payment(null, BigDecimal.valueOf(500), debt,
                 LocalDateTime.of(2024, 11, 30, 12, 50, 55), "Cash");
-
-        Payment savedPayment = paymentRepositoryGateway.createPayment(payment);
-        paymentId = savedPayment.getId();
     }
 
     @Test
-    void createPayment() {
-        Payment savedPayment = paymentRepositoryGateway.createPayment(payment);
+    void execute() {
+        Payment savedPayment = createPaymentUseCase.execute(payment, debt.getId());
 
         assertNotNull(savedPayment.getId());
         assertEquals(savedPayment.getPaymentDate(), payment.getPaymentDate());
         assertEquals(savedPayment.getAmount(), payment.getAmount());
         assertEquals(savedPayment.getDebt(), payment.getDebt());
         assertEquals(savedPayment.getMethod(), payment.getMethod());
-    }
-
-    @Test
-    void getPayments() {
-        List<Payment> payments = paymentRepositoryGateway.getPayments();
-
-        assertThat(payments.size()).isNotZero();
-    }
-
-    @Test
-    void getPayment() {
-        Payment payment = paymentRepositoryGateway.getPayment(paymentId);
-        assertNotNull(payment);
-    }
-
-    @Test
-    void getPaymentsByDebt() {
-        List<Payment> payments = paymentRepositoryGateway.getPaymentsByDebt(debt.getId());
-        assertTrue(payments.isEmpty());
-    }
-
-    @Test
-    void updatePayment() {
-        Payment paymentToUpdate = new Payment(null, BigDecimal.valueOf(600), debt,
-                LocalDateTime.of(2024, 11, 30, 12, 50, 55), "Credit Card");
-        Payment updatedPayment = paymentRepositoryGateway.updatePayment(paymentId, paymentToUpdate);
-
-        assertNotNull(updatedPayment.getId());
-        assertEquals(updatedPayment.getPaymentDate(), paymentToUpdate.getPaymentDate());
-        assertEquals(updatedPayment.getAmount(), paymentToUpdate.getAmount());
-        assertEquals(updatedPayment.getDebt(), paymentToUpdate.getDebt());
-        assertEquals(updatedPayment.getMethod(), paymentToUpdate.getMethod());
-    }
-
-    @Test
-    void deletePayment() {
-        paymentRepositoryGateway.deletePayment(paymentId);
-        assertThrows(ItemNotFoundException.class, () -> {
-            paymentRepositoryGateway.getPayment(paymentId);
-        });
     }
 }

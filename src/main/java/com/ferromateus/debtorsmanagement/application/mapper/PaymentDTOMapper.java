@@ -5,10 +5,10 @@ import com.ferromateus.debtorsmanagement.presentation.dto.PaymentDTO;
 
 public class PaymentDTOMapper {
 
-    // Will we need?
-//    public static paymentDTO toDTO(Payment payment) {}
+    private PaymentDTOMapper() {}
 
     public static Payment toDomain(PaymentDTO paymentDTO) {
+        if (paymentDTO == null) throw new IllegalArgumentException("PaymentDTO cannot be null");
         return new Payment(
                 null,
                 paymentDTO.amount(),
