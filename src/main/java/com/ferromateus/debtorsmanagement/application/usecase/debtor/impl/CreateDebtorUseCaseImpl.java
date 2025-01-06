@@ -14,6 +14,7 @@ public class CreateDebtorUseCaseImpl implements CreateDebtorUseCase {
 
     @Override
     public Debtor execute(Debtor debtor) {
+        debtor.setStatus(true);
         return debtorGateway.createDebtor(debtor);
     }
 }

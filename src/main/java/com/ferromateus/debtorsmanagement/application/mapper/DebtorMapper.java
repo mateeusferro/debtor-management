@@ -4,6 +4,9 @@ import com.ferromateus.debtorsmanagement.domain.model.Debtor;
 import com.ferromateus.debtorsmanagement.infrastructure.persistence.entity.DebtorEntity;
 
 public class DebtorMapper {
+
+    private DebtorMapper() {}
+
     public static Debtor toDomain(DebtorEntity debtor) {
         if (debtor == null) throw new IllegalArgumentException("The debtor cannot be null");
         return new Debtor(

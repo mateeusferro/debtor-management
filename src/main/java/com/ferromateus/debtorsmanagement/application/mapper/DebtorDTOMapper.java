@@ -5,10 +5,10 @@ import com.ferromateus.debtorsmanagement.presentation.dto.DebtorDTO;
 
 public class DebtorDTOMapper {
 
-    // Will we need?
-//    public static debtorDTO toDTO(Debtor debtor) {}
+    private DebtorDTOMapper() {}
 
     public static Debtor toDomain(DebtorDTO debtorDTO) {
+        if (debtorDTO == null) throw new IllegalArgumentException("The debtorDTO cannot be null");
         return new Debtor(
                 null,
                 debtorDTO.address(),
