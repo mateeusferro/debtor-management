@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtors-management
+  labels:
+    app: debtors-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: debtors-management
+  template:
+    metadata:
+      labels:
+        app: debtors-management
+    spec:
+      containers:
+        - name: debtors-management
+          image: debtorregistry.azurecr.io/your-container-name:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://debtorsdb.postgres.database.azure.com:5432/postgres?sslmode=require"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password
+            - name: SPRING_APPLICATION_NAME
+              value: "debtors-management"
+            - name: MANAGEMENT_ENDPOINT_METRICS_ACCESS
+              value: "read_only"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "*"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "none"
+            - name: SPRING_JPA_SHOW_SQL
+              value: "true"
+            - name: LOGGING_LEVEL_ROOT
+              value: "info"
+      imagePullSecrets:
+        - name: acr-secret
