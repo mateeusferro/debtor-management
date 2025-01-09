@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: debtors-management
-          image: debtorregistry.azurecr.io/your-container-name:latest
+          image: debtorregistry.azurecr.io/debtorcontainer:latest
           ports:
             - containerPort: 8080
           env:
